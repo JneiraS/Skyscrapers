@@ -54,7 +54,7 @@ def step_tow(dimension: int):
 
 if __name__ == "__main__":
 
-    print(step_tow(5))
+    print(step_tow(4))
 
     # loop_time = timeit.timeit("step_tow(4)", globals=globals(), number=1)
     # print(f"Temps d'exécution: {loop_time/10:.3f} secondes")

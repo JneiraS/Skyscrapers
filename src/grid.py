@@ -29,19 +29,21 @@ class Grid:
     #     Retourne :
     #     - list : Une liste de listes vides, représentant une grille vide de dimensions spécifiées.
     #
-    #     Note : Cette méthode est utilisée pour initialiser la grille lors de l'instanciation de la classe Grid.
+    #     Note : Cette méthode est utilisée pour initialiser la grille lors de l'instanciation de la classe
+    #     Grid.
     #     """
     #     return
 
     def generate_valid_configuration(self, seed_number: int):
         """
-        Génère une configuration valide de la grille en utilisant des permutations aléatoires de hauteurs de bâtiments.
+        Génère une configuration valide de la grille en utilisant des permutations aléatoires de hauteurs
+        de bâtiments.
 
         Cette méthode procède de la manière suivante :
         1. Génère une liste de hauteurs de bâtiments possibles en fonction de la dimension de la grille.
         2. Calcule toutes les permutations possibles de ces hauteurs de bâtiments.
-        3. Pour chaque position dans la grille, sélectionne aléatoirement une permutation unique de hauteurs de
-        bâtiments
+        3. Pour chaque position dans la grille, sélectionne aléatoirement une permutation unique de
+        hauteurs de bâtiments
            qui n'a pas encore été utilisée dans cette position, en s'assurant qu'il n'y a pas de doublons.
         4. Attribue cette configuration unique à la grille.
         5. Ajoute des indices ou des "clues" à la grille pour faciliter le jeu ou la résolution du puzzle.
@@ -74,12 +76,13 @@ class Grid:
 
         Cette méthode procède de la manière suivante :
         1. Initialise une liste de placeholders (-1) pour les indices/clues en haut et en bas de la grille.
-        2. Pour chaque ligne de la grille, insère un indice (0) au début et à la fin de la ligne, préparant ainsi
-        l'espace pour les indices ou clues.
-        3. Ajoute les placeholders (indices/clues) en haut et en bas de la grille principale, représentant les indices
-        ou clues en haut et en bas de la grille globale.
+        2. Pour chaque ligne de la grille, insère un indice (0) au début et à la fin de la ligne,
+        préparant ainsil'espace pour les indices ou clues.
+        3. Ajoute les placeholders (indices/clues) en haut et en bas de la grille principale, représentant
+        les indices ou clues en haut et en bas de la grille globale.
 
-        Note : Les placeholders (-1) sont utilisés pour indiquer les positions où les indices ou clues seront placés.
+        Note : Les placeholders (-1) sont utilisés pour indiquer les positions où les indices ou clues
+        seront placés.
 
         Returns:
             None
@@ -101,22 +104,25 @@ class GridFactory:
     """
     Classe Factory pour la création de configurations de grille valides.
 
-    Cette classe fournit une méthode statique pour générer une instance de grille avec une configuration valide,
+    Cette classe fournit une méthode statique pour générer une instance de grille avec une configuration
+    valide,
     basée sur une dimension spécifique et un nombre de graine (seed).
     """
 
     @staticmethod
     def grid_filler(dimension: int, seed_number: int) -> Grid:
         """
-        Génère une configuration de grille valide basée sur la dimension spécifiée et le nombre de graine (seed).
+        Génère une configuration de grille valide basée sur la dimension spécifiée et le nombre de graine (
+        seed).
 
         Paramètres :
         - dimension (int) : La dimension de la grille à générer.
-        - seed_number (int) : Le nombre de graine utilisé pour initialiser le générateur de nombres aléatoires.
+        - seed_number (int) : Le nombre de graine utilisé pour initialiser le générateur de nombres
+        aléatoires.
 
         Retourne :
-        - Grid : Une instance de grille avec une configuration valide pour la dimension spécifiée, initialement générée
-        avec le nombre de graine fourni.
+        - Grid : Une instance de grille avec une configuration valide pour la dimension spécifiée,
+        initialement générée avec le nombre de graine fourni.
 
         Note : La méthode retourne une nouvelle instance de grille et ne modifie pas les grilles existantes.
         """
@@ -128,8 +134,8 @@ def transpose(grille: list) -> list:
     Transpose un tableau.
 
     Paramètres :
-    - grille (list) : Un tableau représenté comme une liste de listes, où chaque sous-liste représente une ligne du
-    tableau.
+    - grille (list) : Un tableau représenté comme une liste de listes, où chaque sous-liste représente une
+    ligne du tableau.
 
     Retourne :
     - list : Le tableau transposé.
@@ -169,8 +175,8 @@ def indice_adder(indices: list, grid: list):
 
 def clues(grille: list) -> list:
     """
-    Calcule les indices d'une grille en comptant le nombre de fois où une valeur augmente par rapport à la précédente
-    dans chaque ligne,excluant les bordures extérieures.
+    Calcule les indices d'une grille en comptant le nombre de fois où une valeur augmente par rapport à la
+    précédente dans chaque ligne,excluant les bordures extérieures.
 
     Paramètres :
     - grille (list) : Le tableau d'entrée dont les indices doivent être calculés.
@@ -203,26 +209,28 @@ def raw_grids_generator(grid_seize: int, seed_number: int) -> tuple:
 
     Paramètres :
     - grid_seize (int) : La taille du tableau à générer.
-    - seed_number (int) : Une valeur de graine utilisée pour initialiser le processus de remplissage du tableau.
+    - seed_number (int) : Une valeur de graine utilisée pour initialiser le processus de remplissage du
+    tableau.
 
     Retourne :
     - tuple : Un tuple contenant deux tableaux.
-      - Le premier élément est l'`empty_grid_for_play`, qui est une copie profonde du tableau original mais avec '-1'
-       insérés autour du périmètre pour indiquer les zones non jouables.
-      - Le second élément est le `grille`, qui est le tableau transformé final après avoir appliqué des indices et des
-       transpositions quatre fois.
+      - Le premier élément est l'`empty_grid_for_play`, qui est une copie profonde du tableau original mais
+       avec '-1' insérés autour du périmètre pour indiquer les zones non jouables.
+      - Le second élément est le `grille`, qui est le tableau transformé final après avoir appliqué des
+      indices et des transpositions quatre fois.
 
     Processus :
-    1. Initialise le tableau en utilisant une méthode de remplissage de tableau à partir d'une instance de GridFactory,
-    en utilisant la taille de tableau et le numéro de seed fournis.
-    2. Applique une série de transformations au tableau, y compris l'ajout d'indices et la transposition du tableau,
-    répétées quatre fois.
-    3. Crée une copie profonde du tableau final pour le préparer au jeu, en insérant '-1' autour du périmètre pour
-    marquer les zones non jouables.
+    1. Initialise le tableau en utilisant une méthode de remplissage de tableau à partir d'une instance de
+    GridFactory, en utilisant la taille de tableau et le numéro de seed fournis.
+    2. Applique une série de transformations au tableau, y compris l'ajout d'indices et la transposition du
+    tableau,répétées quatre fois.
+    3. Crée une copie profonde du tableau final pour le préparer au jeu, en insérant '-1' autour du
+    périmètre pour marquer les zones non jouables.
     4. Retourne à la fois le tableau préparé pour le jeu et le tableau transformé final.
     """
     board = GridFactory().grid_filler(grid_seize, seed_number)
     grille = board.grid
+
     for _ in range(4):
         indices = clues(grille)
         grille = transpose(indice_adder(indices, grille))
