@@ -1,29 +1,55 @@
 import random
 from itertools import permutations
-from grid import transpose, clues, indice_adder, Grid
-
-from ui import grid_printer
+from src.grid import transpose, clues, indice_adder, Grid
 
 results_to_insert: list = []
 grid_filled: list = []
 
 
-def permutatios_posibles():
-    buildings_heights = [i for i in range(1, 5)]
+def permutations_possibles(grid_seize: int):
+    """
+    Génère toutes les permutations possibles de hauteurs de bâtiments pour un grille de taille 'grid_seize'.
+    Cette fonction crée une liste de hauteurs de bâtiments allant de 1 à 'grid_seize', puis génère toutes les
+    permutations possibles de ces hauteurs.
+    Ces permutations représentent toutes les configurations possibles de hauteurs de bâtiments dans un grille donné.
+
+    :param grid_seize:
+    :return list: Une liste de tuples, où chaque tuple représente une permutation possible des hauteurs de
+    bâtiments. Chaque tuple contient 'grid_seize' éléments, chacun étant une hauteur de bâtiment valide dans la grille.
+    """
+    buildings_heights = [height for height in range(1, grid_seize + 1)]
     return list(permutations(buildings_heights))
 
 
-def replace_zeros_with_sets(original_list, rest):
-    return [rest if e == 0 else e for e in original_list]
+def replace_zeros_with_list_of_possibilities(original_list: list, remaining_possibilities: list):
+    """
+    Remplace tous les zéros dans original-list par remaining_possibilities.
+    Parcourt chaque élément de original_list et le remplace par rest si l'élément est égal à 0. Autrement dit,
+    transforme les zéros en remaining_possibilities, tout en conservant les autres valeurs inchangées.
+    :param original_list: La liste originale dont certains éléments doivent être remplacés par remaining_possibilities.
+    remaining_possibilities (any): L'élément avec lequel remplacer les zéros dans original_list.
+    :param remaining_possibilities:  L'élément avec lequel remplacer les zéros dans original_list.
+    :return list: Une nouvelle liste où tous les zéros ont été remplacés par remaining_possibilities, tandis que les autres
+     valeurs restent inchangées.
+    """
+    return [remaining_possibilities if e == 0 else e for e in original_list]
 
 
-def replace_sets_whit_0(original_list):
+def replace_list_of_possibilities_whit_0(original_list):
+    """
+    Remplace tous les éléments de liste dans original_list par 0.
+    Parcourt chaque élément de original_list. Si l'élément est lui-même une liste, il est remplacé par 0. Sinon,
+    l'élément reste inchangé.
+
+    :param original_list: La liste originale dont certains éléments (qui sont eux-mêmes des listes) doivent être
+     remplacés par 0.
+    :return list: Une nouvelle liste où tous les éléments qui étaient des listes ont été remplacés par 0, tandis que les autres valeurs restent inchangées.
+    """
     return [0 if isinstance(e, list) else e for e in original_list]
 
 
 def determine_last_line(list_to_analyse: list):
-
-    perms = permutatios_posibles()
+    perms = permutations_possibles(4)
 
     for j in range(1, 4):
         for i in range(4):
@@ -31,7 +57,7 @@ def determine_last_line(list_to_analyse: list):
                 line
                 for line in perms
                 if line[i] != list_to_analyse[j][i + 1]
-                or list_to_analyse[j][i + 1] == 0
+                   or list_to_analyse[j][i + 1] == 0
             ]
 
     for i in range(4):
@@ -45,7 +71,6 @@ def determine_last_line(list_to_analyse: list):
 
 
 def generate_game_configurations(game_grid: list):
-
     grid_dimension = len(game_grid) - 2
     modified_new_grid = []
     modified_new_grid2 = []
@@ -71,8 +96,8 @@ def generate_game_configurations(game_grid: list):
         game_grid = transpose(game_grid)
 
     for row in game_grid:
-        rest = list(base - {e for e in row[1:-1]})
-        modified_new_grid.append(replace_zeros_with_sets(row, rest))
+        remaining_possibilities = list(base - {e for e in row[1:-1]})
+        modified_new_grid.append(replace_zeros_with_list_of_possibilities(row, remaining_possibilities))
 
     for i in range(4):
         for row in modified_new_grid:
@@ -87,7 +112,7 @@ def generate_game_configurations(game_grid: list):
         modified_new_grid = transpose(modified_new_grid)
 
     for row in modified_new_grid:
-        modified_new_grid2.append(replace_sets_whit_0(row))
+        modified_new_grid2.append(replace_list_of_possibilities_whit_0(row))
     return modified_new_grid2
 
 
@@ -97,7 +122,6 @@ def decalage(grid_to_decale: list, origine: int, destination: int):
 
 
 def adaptive_game_grid_generation(game_grid):
-
     grid_with_euristics = generate_game_configurations(game_grid)
 
     empty_grid = []
@@ -158,7 +182,6 @@ grid = [
     [-1, 1, 2, 2, 2, -1],
 ]
 
-
 while True:
 
     original = adaptive_game_grid_generation(grid)
@@ -171,7 +194,6 @@ while True:
     if container == [4, 4, 4, 4]:
         break
 
-
 grid_to_find_solution = Grid(4)
 grid_to_find_solution.grid = original
 grid_to_find_solution.add_clues()
@@ -182,4 +204,4 @@ for _ in range(4):
     indices = clues(gridd)
     gridd = transpose(indice_adder(indices, gridd))
 
-grid_printer(gridd)
+# grid_printer(gridd)
